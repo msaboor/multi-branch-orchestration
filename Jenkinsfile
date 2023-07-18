@@ -38,7 +38,7 @@ pipeline {
 
                     for (branch in branches) {
                         sh "git checkout ${branch}"
-                        sh 'git merge develop'
+                        sh 'git merge main'
                     }
                 }
             }
