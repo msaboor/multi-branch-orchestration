@@ -19,11 +19,12 @@ pipeline {
                 script {
                     def branches = sh(returnStdout: true, script: 'git ls-remote --heads origin | cut -f2 | cut -d/ -f3-').trim().split("\\r?\\n")
                     def folders = sh(returnStdout: true, script: 'ls -d */').trim().split("\\r?\\n")
-
+					
                     for (folder in folders) {
-                        if (!branches.contains("origin/${folder}")) {
-                            sh "git checkout -b ${folder} main"
-                            sh 'git push -u origin ${folder}'
+						folder_without_slash=$(echo "$folder" | sed 's#^/##')
+                        if (!branches.contains("origin/${folder_without_slash}")) {
+                            sh "git checkout -b ${folder_without_slash} "
+                            sh 'git push -u origin ${folder_without_slash}'
                         }
                     }
                 }
@@ -37,7 +38,7 @@ pipeline {
 
                     for (branch in branches) {
                         sh "git checkout ${branch}"
-                        sh 'git merge main'
+                        sh 'git merge develop'
                     }
                 }
             }
