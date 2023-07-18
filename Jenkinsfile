@@ -21,10 +21,10 @@ pipeline {
                     def folders = sh(returnStdout: true, script: 'ls -d */').trim().split("\\r?\\n")
 					
                     for (folder in folders) {
-						folder_trimmed=$(echo "$folder" | sed 's#^/##')
-                        if (!branches.contains("origin/${folder_trimmed}")) {
-                            sh "git checkout -b ${folder_trimmed} "
-                            sh 'git push -u origin ${folder_trimmed}'
+						trimmedFolder=$(echo "$folder" | sed 's#^/##')
+                        if (!branches.contains("origin/${trimmedFolder}")) {
+                            sh "git checkout -b ${trimmedFolder} "
+                            sh 'git push -u origin ${trimmedFolder}'
                         }
                     }
                 }
