@@ -22,7 +22,7 @@ pipeline {
 
                     for (folder in folders) {
                         if (!branches.contains("origin/${folder}")) {
-                            sh "git checkout -b ${folder} develop"
+                            sh "git checkout -b ${folder} main"
                             sh 'git push -u origin ${folder}'
                         }
                     }
@@ -37,7 +37,7 @@ pipeline {
 
                     for (branch in branches) {
                         sh "git checkout ${branch}"
-                        sh 'git merge develop'
+                        sh 'git merge main'
                     }
                 }
             }
