@@ -20,7 +20,7 @@ pipeline {
                    sh '''
 				   branches=`git ls-remote --heads origin | cut -f2 | cut -d/ -f3-`
 				   echo $branches
-				   arr=($branches)
+				   arr=( $branches )
 				   folders=`ls -d */`
 				   echo $folders
 				   for folder in "${folders}"; do
