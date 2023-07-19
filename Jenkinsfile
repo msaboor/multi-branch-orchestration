@@ -19,6 +19,7 @@ pipeline {
                 script {
                    sh '''
 				   branches=`git ls-remote --heads origin | cut -f2 | cut -d/ -f3-`
+				   branches=\"${branches}\"
 				   echo $branches
 				   arr=( ${branches} )
 				   for i in "${arr[@]}"; do echo $i; done
