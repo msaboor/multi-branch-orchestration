@@ -2,18 +2,10 @@ pipeline {
     agent any
 
     stages {
-		stage('Setting the variables values') {
-			steps {
-				 sh '''#!/bin/bash
-						 echo "hello world" 
-				 '''
-			}
 
-		}
         stage('Scan All Branches') {
             steps {
-                sh '
-				git ls-remote --heads origin | cut -f2 | cut -d/ -f3-'
+                sh 'git ls-remote --heads origin | cut -f2 | cut -d/ -f3-'
             }
         }
 
