@@ -29,8 +29,8 @@ pipeline {
 					   branch_name="${folder}"
 					   trimmedFolder=$(echo "$folder" | sed 's|/||')
 					   echo $trimmedFolder
-					   grep_result=`echo $branches | tr ' ' '\n' | grep ${trimmedFolder}`
-					   if [ "$grep_result" != "$trimmedFolder" ]; then
+					   grep_result=`echo $branches |  grep ${trimmedFolder}`
+					   if [  -z "$grep_result" ]; then
 							echo "The grep command had output, but it was not equal to $trimmedFolder."
 							echo "Output: $grep_result"
 							git checkout -b "$branch_name"
