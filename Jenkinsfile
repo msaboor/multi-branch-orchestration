@@ -18,9 +18,10 @@ pipeline {
             steps {
                 script {
                    sh '''
+				   declare -a arr
 				   branches=`git ls-remote --heads origin | cut -f2 | cut -d/ -f3-`
 				   echo $branches
-				   arr=(`echo ${branches}`);
+				   arr=($(echo "${branches}"))
 				   for i in "${arr[@]}"; do echo $i; done
 					   folders=`ls -d */`
 					   echo $folders
