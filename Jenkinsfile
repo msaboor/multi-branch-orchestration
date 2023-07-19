@@ -17,16 +17,22 @@ pipeline {
         stage('Create New Branches') {
             steps {
                 script {
-                    def branches = sh(returnStdout: true, script: 'git ls-remote --heads origin | cut -f2 | cut -d/ -f3-').trim().split("\\r?\\n")
-                    def folders = sh(returnStdout: true, script: 'ls -d */').trim().split("\\r?\\n")
-					
-                    for (folder in folders) {
-                        def trimmedFolder=$(echo "$folder" | sed 's#^/##')
-                        if (!branches.contains("origin/${trimmedFolder}")) {
-                            sh "git checkout -b ${trimmedFolder} "
-                            sh 'git push -u origin ${trimmedFolder}'
-                        }
-                    }
+                   sh '''
+				   branches=`git ls-remote --heads origin | cut -f2 | cut -d/ -f3-`
+				   echo $branches
+				   folders=`ls -d */`
+				   echo $folders
+				   for folder in "${folders}"; do
+				   branch_name="${folder}"
+				   trimmedFolder=$(echo "$folder" | sed 's|/||')
+				   echo $trimmedFolder
+					   if [[ " ${arr[*]} " =~ " ${trimmedFolder} " ]]; then
+							git checkout -b "$branch_name"
+							git push -u origin "$branch_name"
+							echo "Created and pushed branch: $branch_name"
+						fi
+					done
+				'''
                 }
             }
         }
