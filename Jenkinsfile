@@ -4,20 +4,26 @@ pipeline {
     stages {
         stage('Scan All Branches') {
             steps {
-                sh 'git ls-remote --heads origin | cut -f2 | cut -d/ -f3-'
+                sh '''
+				#!/bin/bash	
+				git ls-remote --heads origin | cut -f2 | cut -d/ -f3-
+				'''
             }
         }
 
         stage('Scan All Folders in Root') {
             steps {
-                sh 'ls -d */'
+                sh '''
+				#!/bin/bash	
+				ls -d */
+				'''
             }
         }
 
         stage('Create New Branches') {
             steps {
                 script {
-                   sh '''	
+                   sh '''				   
 				   #!/bin/bash	
 				   branches=`git ls-remote --heads origin | cut -f2 | cut -d/ -f3-`
 				   echo $branches
