@@ -29,7 +29,7 @@ pipeline {
 					   branch_name="${folder}"
 					   trimmedFolder=$(echo "$folder" | sed 's|/||')
 					   echo $trimmedFolder
-					   grep_result=$(echo "$branches" |  grep "${trimmedFolder}")
+					   grep_result=$(echo -n "$branches" |  tr '\n' ' '| grep "${trimmedFolder}")
 					   if [  -z "$grep_result" ]; then
 							echo "The grep command had output, but it was not equal to $trimmedFolder."
 							echo "Output: $grep_result"
