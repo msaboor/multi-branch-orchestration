@@ -5,7 +5,7 @@ pipeline {
         stage('Scan All Branches') {
             steps {
                 sh '''
-				#!/bin/bash	
+				#!/bin/bash
 				git ls-remote --heads origin | cut -f2 | cut -d/ -f3-
 				'''
             }
@@ -24,7 +24,8 @@ pipeline {
             steps {
                 script {
                    sh '''				   
-				   #!/bin/bash	
+				   #!/bin/bash
+				   echo "Who I'm $SHELL"
 				   branches=`git ls-remote --heads origin | cut -f2 | cut -d/ -f3-`
 				   echo $branches
 				   set -f
