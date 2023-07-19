@@ -12,19 +12,14 @@ pipeline {
 		}
         stage('Scan All Branches') {
             steps {
-                sh '''
-				#!/bin/bash
-				git ls-remote --heads origin | cut -f2 | cut -d/ -f3-
-				'''
+                sh '
+				git ls-remote --heads origin | cut -f2 | cut -d/ -f3-'
             }
         }
 
         stage('Scan All Folders in Root') {
             steps {
-                sh '''
-				#!/bin/bash	
-				ls -d */
-				'''
+                sh 'ls -d */'
             }
         }
 
@@ -36,21 +31,22 @@ pipeline {
 				   echo "Who I'm $SHELL"
 				   branches=`git ls-remote --heads origin | cut -f2 | cut -d/ -f3-`
 				   echo $branches
-				   set -f
-				   arr=($(echo "${branches}"))
-				   set +f
-				   for i in "${arr[@]}"; do echo $i; done
-					   folders=`ls -d */`
-					   echo $folders
-					   for folder in "${folders}"; do
+				   folders=`ls -d */`
+				   echo $folders
+				   for folder in "${folders}"; do
 					   branch_name="${folder}"
 					   trimmedFolder=$(echo "$folder" | sed 's|/||')
 					   echo $trimmedFolder
-						   if [[ " ${arr[*]} " =~ " ${trimmedFolder} " ]]; then
-								git checkout -b "$branch_name"
-								git push -u origin "$branch_name"
-								echo "Created and pushed branch: $branch_name"
-							fi
+					   grep_result=`echo $branches | tr ' ' '\n' | grep ${trimmedFolder}`
+					   if [ "$grep_result" != "$trimmedFolder" ]; then
+							echo "The grep command had output, but it was not equal to $trimmedFolder."
+							echo "Output: $grep_result"
+							git checkout -b "$branch_name"
+							git push -u origin "$branch_name"
+							echo "Created and pushed branch: $branch_name"
+					   else
+							echo "The grep command had no output or found $trimmedFolder."
+					  fi
 					done
 				'''
                 }
