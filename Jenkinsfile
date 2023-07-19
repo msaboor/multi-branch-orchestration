@@ -17,7 +17,8 @@ pipeline {
         stage('Create New Branches') {
             steps {
                 script {
-                   sh '''				   
+                   sh '''	
+				   #!/bin/bash	
 				   branches=`git ls-remote --heads origin | cut -f2 | cut -d/ -f3-`
 				   echo $branches
 				   set -f
