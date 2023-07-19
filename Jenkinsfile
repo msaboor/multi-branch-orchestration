@@ -17,11 +17,12 @@ pipeline {
         stage('Create New Branches') {
             steps {
                 script {
-                   sh '''
-				   declare -a arr
+                   sh '''				   
 				   branches=`git ls-remote --heads origin | cut -f2 | cut -d/ -f3-`
 				   echo $branches
+				   set -f
 				   arr=($(echo "${branches}"))
+				   set +f
 				   for i in "${arr[@]}"; do echo $i; done
 					   folders=`ls -d */`
 					   echo $folders
