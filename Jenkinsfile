@@ -19,7 +19,7 @@ pipeline {
             steps {
                 script {
                    sh '''				   
-				   #!/bin/bash
+				   #!/bin/sh
 				   echo "Who I'm $SHELL"
 				   branches=`git ls-remote --heads origin | cut -f2 | cut -d/ -f3-`
 				   echo $branches
@@ -31,7 +31,7 @@ pipeline {
 					   echo $trimmedFolder
 					   branches_space_delimited=$(echo -n "$branches" |  tr '\n' ' ')
 					   echo $branches_space_delimited
-					   grep_result=$(echo -n "$branches_space_delimited" | grep "${trimmedFolder}")
+					   grep_result=$(echo "$branches_space_delimited" | grep "${trimmedFolder}")
 					   grep $grep_result
 					   if [  -z "$grep_result" ]; then
 							echo "The grep command had output, but it was not equal to $trimmedFolder."
