@@ -20,18 +20,19 @@ pipeline {
                    sh '''
 				   branches=`git ls-remote --heads origin | cut -f2 | cut -d/ -f3-`
 				   echo $branches
-				   arr=( $branches )
-				   folders=`ls -d */`
-				   echo $folders
-				   for folder in "${folders}"; do
-				   branch_name="${folder}"
-				   trimmedFolder=$(echo "$folder" | sed 's|/||')
-				   echo $trimmedFolder
-					   if [[ " ${arr[*]} " =~ " ${trimmedFolder} " ]]; then
-							git checkout -b "$branch_name"
-							git push -u origin "$branch_name"
-							echo "Created and pushed branch: $branch_name"
-						fi
+				   arr=( ${branches} )
+				   for i in "${arr[@]}"; do echo $i; done
+					   folders=`ls -d */`
+					   echo $folders
+					   for folder in "${folders}"; do
+					   branch_name="${folder}"
+					   trimmedFolder=$(echo "$folder" | sed 's|/||')
+					   echo $trimmedFolder
+						   if [[ " ${arr[*]} " =~ " ${trimmedFolder} " ]]; then
+								git checkout -b "$branch_name"
+								git push -u origin "$branch_name"
+								echo "Created and pushed branch: $branch_name"
+							fi
 					done
 				'''
                 }
