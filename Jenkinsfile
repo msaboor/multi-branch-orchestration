@@ -4,7 +4,9 @@ pipeline {
     stages {
 
         stage('Stage Checkout') {
+			steps {
 				 checkout scm
+				 }
 		}
         stage('Scan All Branches') {
             steps {
