@@ -35,9 +35,9 @@ pipeline {
 					   if [ "$branches_space_delimited" != *"$trimmedFolder"* ]; then
 							echo "The grep command had output, but it was not equal to $trimmedFolder."
 							echo "Output: $grep_result"
-							git checkout -b "$branch_name"
-							git push -u origin "$branch_name"
-							echo "Created and pushed branch: $branch_name"
+							git checkout -b "$trimmedFolder"
+							git push -u origin "$trimmedFolder"
+							echo "Created and pushed branch: $trimmedFolder"
 					   else
 							echo "The grep command had no output or found $trimmedFolder."
 					  fi
