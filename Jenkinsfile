@@ -22,7 +22,7 @@ pipeline {
 
         stage('Create New Branches') {
             steps {
-				withCredentials([usernamePassword(credentialsId: 'saboor-github-credentials', usernameVariable: 'GIT_USERNAME', passwordVariable: 'GIT_PASSWORD')]) {
+				withCredentials([usernamePassword(credentialsId: 'github-token', secret: 'GIT_PAT')]) {
 					script {
 					   sh '''				   
 					   #!/bin/sh
@@ -42,7 +42,7 @@ pipeline {
 								echo "The grep command had output, but it was not equal to $trimmedFolder."
 								echo "Output: $grep_result"
 								git checkout -b "$trimmedFolder"
-								git push  https://${GIT_USERNAME}:${GIT_PASSWORD}@github.com/msaboor/multi-branch-orchestration.git  "$trimmedFolder"							
+								git push  https://${GIT_PAT}@github.com/msaboor/multi-branch-orchestration.git  "$trimmedFolder"							
 								echo "Created and pushed branch: $trimmedFolder"
 						   else
 								echo "The grep command had no output or found $trimmedFolder."
