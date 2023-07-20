@@ -22,37 +22,37 @@ pipeline {
 
         stage('Create New Branches') {
             steps {
-				
-                script {
 				withCredentials([usernamePassword(credentialsId: 'saboor-github-credentials', usernameVariable: 'GIT_USERNAME', passwordVariable: 'GIT_PASSWORD')]) {
-								
-                   sh '''				   
-				   #!/bin/sh
-				   echo "Who I'm $SHELL"
-				   branches=`git ls-remote --heads origin | cut -f2 | cut -d/ -f3-`
-				   echo $branches
-				   folders=`ls -d */`
-				   echo $folders
-				   for folder in "${folders}"; do
-					   branch_name="${folder}"
-					   trimmedFolder=$(echo "$folder" | sed 's|/||')
-					   echo $trimmedFolder
-					   branches_space_delimited=$(echo -n "$branches" |  tr '\n' ' ')
-					   echo $branches_space_delimited
+					script {
+					   sh '''				   
+					   #!/bin/sh
+					   echo "Who I'm $SHELL"
+					   branches=`git ls-remote --heads origin | cut -f2 | cut -d/ -f3-`
+					   echo $branches
+					   folders=`ls -d */`
+					   echo $folders
+					   for folder in "${folders}"; do
+						   branch_name="${folder}"
+						   trimmedFolder=$(echo "$folder" | sed 's|/||')
+						   echo $trimmedFolder
+						   branches_space_delimited=$(echo -n "$branches" |  tr '\n' ' ')
+						   echo $branches_space_delimited
 
-					   if [ "$branches_space_delimited" != *"$trimmedFolder"* ]; then
-							echo "The grep command had output, but it was not equal to $trimmedFolder."
-							echo "Output: $grep_result"
-							git checkout -b "$trimmedFolder"
-							git push -u origin "$trimmedFolder"							
-							echo "Created and pushed branch: $trimmedFolder"
-					   else
-							echo "The grep command had no output or found $trimmedFolder."
-					  fi
-					done
-				'''
+						   if [ "$branches_space_delimited" != *"$trimmedFolder"* ]; then
+								echo "The grep command had output, but it was not equal to $trimmedFolder."
+								echo "Output: $grep_result"
+								git checkout -b "$trimmedFolder"
+								git push -u origin "$trimmedFolder"
+								
+								echo "Created and pushed branch: $trimmedFolder"
+						   else
+								echo "The grep command had no output or found $trimmedFolder."
+						  fi
+						done
+					'''
+					
+					}
 				}
-				
             }
         }
 
