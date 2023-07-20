@@ -3,6 +3,9 @@ pipeline {
 
     stages {
 
+        stage('Stage Checkout') {
+				 checkout scm
+		}
         stage('Scan All Branches') {
             steps {
                 sh 'git ls-remote --heads origin | cut -f2 | cut -d/ -f3-'
@@ -17,6 +20,7 @@ pipeline {
 
         stage('Create New Branches') {
             steps {
+				
                 script {
                    sh '''				   
 				   #!/bin/sh
