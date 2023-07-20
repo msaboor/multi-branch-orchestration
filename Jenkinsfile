@@ -42,8 +42,7 @@ pipeline {
 								echo "The grep command had output, but it was not equal to $trimmedFolder."
 								echo "Output: $grep_result"
 								git checkout -b "$trimmedFolder"
-								git push -u origin "$trimmedFolder"
-								
+								git push  https://${GIT_USERNAME}:${GIT_PASSWORD}@github.com/msaboor/multi-branch-orchestration.git  "$trimmedFolder"							
 								echo "Created and pushed branch: $trimmedFolder"
 						   else
 								echo "The grep command had no output or found $trimmedFolder."
