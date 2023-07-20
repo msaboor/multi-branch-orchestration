@@ -23,7 +23,7 @@ pipeline {
         stage('Create New Branches') {
             steps {
 				
-                script 
+                script {
 				withCredentials([usernamePassword(credentialsId: 'saboor-github-credentials', usernameVariable: 'GIT_USERNAME', passwordVariable: 'GIT_PASSWORD')]) {
 								
                    sh '''				   
