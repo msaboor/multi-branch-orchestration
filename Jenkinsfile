@@ -42,7 +42,9 @@ pipeline {
 							echo "The grep command had output, but it was not equal to $trimmedFolder."
 							echo "Output: $grep_result"
 							git checkout -b "$trimmedFolder"
-							git push -u origin "$trimmedFolder"
+							withCredentials([usernamePassword(credentialsId: 'saboor-github-credentials', usernameVariable: 'GIT_USERNAME', passwordVariable: 'GIT_PASSWORD')]) {
+								git push -u origin "$trimmedFolder"
+							}
 							echo "Created and pushed branch: $trimmedFolder"
 					   else
 							echo "The grep command had no output or found $trimmedFolder."
