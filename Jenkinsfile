@@ -32,7 +32,7 @@ pipeline {
 					   branches_space_delimited=$(echo -n "$branches" |  tr '\n' ' ')
 					   echo $branches_space_delimited
 
-					   if [[ "$branches_space_delimited" != *"$trimmedFolder"* ]]; then
+					   if [ "$branches_space_delimited" != *"$trimmedFolder"* ]; then
 							echo "The grep command had output, but it was not equal to $trimmedFolder."
 							echo "Output: $grep_result"
 							git checkout -b "$branch_name"
