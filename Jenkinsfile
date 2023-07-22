@@ -2,12 +2,6 @@ pipeline {
     agent any
 
     stages {
-
-        stage('Stage Checkout') {
-			steps {
-				 checkout scm
-				 }
-		}
         stage('Scan All Branches') {
             steps {
                 sh 'git ls-remote --heads origin | cut -f2 | cut -d/ -f3-'
@@ -22,36 +16,18 @@ pipeline {
 
         stage('Create New Branches') {
             steps {
-				withCredentials([usernamePassword(credentialsId: 'github-token', secret: 'GIT_PAT')]) {
-					script {
-					   sh '''				   
-					   #!/bin/sh
-					   echo "Who I'm $SHELL"
-					   branches=`git ls-remote --heads origin | cut -f2 | cut -d/ -f3-`
-					   echo $branches
-					   folders=`ls -d */`
-					   echo $folders
-					   for folder in "${folders}"; do
-						   branch_name="${folder}"
-						   trimmedFolder=$(echo "$folder" | sed 's|/||')
-						   echo $trimmedFolder
-						   branches_space_delimited=$(echo -n "$branches" |  tr '\n' ' ')
-						   echo $branches_space_delimited
-
-						   if [ "$branches_space_delimited" != *"$trimmedFolder"* ]; then
-								echo "The grep command had output, but it was not equal to $trimmedFolder."
-								echo "Output: $grep_result"
-								git checkout -b "$trimmedFolder"
-								git push  https://${GIT_PAT}@github.com/msaboor/multi-branch-orchestration.git  "$trimmedFolder"							
-								echo "Created and pushed branch: $trimmedFolder"
-						   else
-								echo "The grep command had no output or found $trimmedFolder."
-						  fi
-						done
-					'''
-					
-					}
-				}
+                script {
+                    def branches = sh(returnStdout: true, script: 'git ls-remote --heads origin | cut -f2 | cut -d/ -f3-').trim().split("\\r?\\n")
+					def branches = branches.replaceAll("/", "")
+                    def folders = sh(returnStdout: true, script: 'ls -d */').trim().split("\\r?\\n")
+					def folders =  folders.replaceAll("/", "")
+                    for (folder in folders) {
+                        if (!branches.contains("origin/${folder}")) {
+                            sh "git checkout -b ${folder} develop"
+                            sh 'git push -u origin ${folder}'
+                        }
+                    }
+                }
             }
         }
 
@@ -62,7 +38,7 @@ pipeline {
 
                     for (branch in branches) {
                         sh "git checkout ${branch}"
-                        sh 'git merge main'
+                        sh 'git merge develop'
                     }
                 }
             }
@@ -93,3 +69,5 @@ pipeline {
         }
     }
 }
+
+
